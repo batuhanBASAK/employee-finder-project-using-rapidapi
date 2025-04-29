@@ -10,19 +10,23 @@ const PORT = process.env.PORT
 const profileInfoAPI = require('./profileInfo')
 
 const getProfileInfo = async (username) => {
-    const response = await profileInfoAPI.getResponse(username)
-    return response.data;
+    try {
+        const response = await profileInfoAPI.getResponse(username)
+        return response.data;
+    } catch (err) {
+        console.error(`Failed to fetch profile for ${username}:`, err);
+        throw err; 
+    }
 }
 
 // Debugging profileInfoAPI
-const profileData = getProfileInfo('batuhan-basak')
-console.log('-------------------------------------------')
-console.log(profileData)
-console.log('-------------------------------------------')
-
-
-
-
+getProfileInfo('batuhan-basak')
+  .then(profileData => {
+    console.log(profileData);
+  })
+  .catch(err => {
+    console.error('Error fetching profile info:', err);
+  });
 
 
 
