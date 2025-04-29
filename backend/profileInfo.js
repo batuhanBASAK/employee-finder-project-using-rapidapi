@@ -2,7 +2,7 @@ const axios = require('axios');
 require('dotenv').config()
 
 
-const API_KEY = process.env.GET_PROFILE_INFO_API_KEY
+const API_KEY = process.env.RAPIDAPI_KEY
 
 
 module.exports = {

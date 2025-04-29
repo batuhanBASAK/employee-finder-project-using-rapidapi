@@ -7,14 +7,24 @@ require('dotenv').config()
 const PORT = process.env.PORT
 
 
-const getProfileInfo = require('./getProfileInfo')
+const profileInfoAPI = require('./profileInfo')
 
-const asyncAPICall = async (username) => {
-    const response = await getProfileInfo.getResponse(username)
-    console.log(response.data)
+const getProfileInfo = async (username) => {
+    const response = await profileInfoAPI.getResponse(username)
+    return response.data;
 }
 
-asyncAPICall('batuhan-basak')
+// Debugging profileInfoAPI
+const profileData = getProfileInfo('batuhan-basak')
+console.log('-------------------------------------------')
+console.log(profileData)
+console.log('-------------------------------------------')
+
+
+
+
+
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`)
