@@ -104,21 +104,7 @@ async function printAllProfiles(keywords) {
 
 
 // Example usage
-printAllProfiles("data science");
-
-
-
-
-
-// testing getAllPeopleSearched
-// getAllPeopleSearched('data science')
-//     .then(peopleInList => {
-//         console.log("Total people fetched:", peopleInList.length);
-//         console.log(peopleInList);
-//     })
-//     .catch(err => console.error("Failed to fetch all people:", err));
-
-
+//printAllProfiles("data science");
 
 
 app.listen(PORT, () => {
