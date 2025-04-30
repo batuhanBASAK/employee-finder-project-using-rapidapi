@@ -57,7 +57,6 @@ async function getAllPeopleSearched(keywords) {
 
     while (true) {
         try {
-            console.log(`searching in page ${start}`)
             const response = await getPeopleSearched(keywords, start);
             
             // Check if items is null
@@ -80,12 +79,44 @@ async function getAllPeopleSearched(keywords) {
 }
 
 
-getAllPeopleSearched('data science')
-    .then(peopleInList => {
-        console.log("Total people fetched:", peopleInList.length);
-        console.log(peopleInList);
-    })
-    .catch(err => console.error("Failed to fetch all people:", err));
+async function printAllProfiles(keywords) {
+    try {
+        const peopleList = await getAllPeopleSearched(keywords);
+
+        for (const person of peopleList) {
+            if (!person.username) {
+                console.warn("Missing username for person:", person);
+                continue;
+            }
+
+            try {
+                const profile = await getProfileInfo(person.username);
+                console.log("Profile Info for", person.username, ":", profile);
+            } catch (err) {
+                console.error(`Could not fetch or print profile for ${person.username}`);
+            }
+        }
+    } catch (err) {
+        console.error("Failed to fetch or process people list:", err);
+    }
+}
+
+
+
+// Example usage
+printAllProfiles("data science");
+
+
+
+
+
+// testing getAllPeopleSearched
+// getAllPeopleSearched('data science')
+//     .then(peopleInList => {
+//         console.log("Total people fetched:", peopleInList.length);
+//         console.log(peopleInList);
+//     })
+//     .catch(err => console.error("Failed to fetch all people:", err));
 
 
 
