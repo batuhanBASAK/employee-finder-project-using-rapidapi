@@ -23,15 +23,6 @@ const getProfileInfo = async (username) => {
     }
 }
 
-// Debugging profileInfoAPI
-// getProfileInfo('batuhan-basak')
-//   .then(profileData => {
-//     console.log(profileData);
-//   })
-//   .catch(err => {
-//     console.error('Error fetching profile info:', err);
-//   });
-
 
 // keyword: job name
 // start: page number
@@ -46,12 +37,56 @@ const getPeopleSearched = async (keywords, start) => {
 }
 
 
-// Debugging getPeopleSearched
-getPeopleSearched('data science', 0)
-    .then(data => {
-        console.log(data)
+function extractPeopleInfo(jsonData) {
+    if (!jsonData || !jsonData.data || !Array.isArray(jsonData.data.items)) {
+        console.error("Invalid JSON structure");
+        return [];
+    }
+  
+    return jsonData.data.items.map(person => ({
+        username: person.username,
+        fullName: person.fullName,
+        location: person.location
+    }));
+}
+
+
+async function getAllPeopleSearched(keywords) {
+    let start = 0;
+    const peopleInList = [];
+
+    while (true) {
+        try {
+            console.log(`searching in page ${start}`)
+            const response = await getPeopleSearched(keywords, start);
+            
+            // Check if items is null
+            if (!response || !response.data || response.data.items === null) {
+                break;
+            }
+
+            // Extract and append people info
+            const extracted = extractPeopleInfo(response);
+            peopleInList.push(...extracted);
+
+            start++; // Move to the next page
+        } catch (err) {
+            console.error("Error fetching people at page", start, ":", err);
+            break; // Exit on error
+        }
+    }
+
+    return peopleInList;
+}
+
+
+getAllPeopleSearched('data science')
+    .then(peopleInList => {
+        console.log("Total people fetched:", peopleInList.length);
+        console.log(peopleInList);
     })
-    .catch(err => console.log(err))
+    .catch(err => console.error("Failed to fetch all people:", err));
+
 
 
 
