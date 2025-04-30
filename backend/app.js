@@ -1,5 +1,9 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
+
+const profileInfoAPI = require('./profileInfo')
+const searchPeopleAPI = require('./searchPeople')
+
 
 require('dotenv').config()
 
@@ -7,104 +11,73 @@ require('dotenv').config()
 const PORT = process.env.PORT
 
 
-const profileInfoAPI = require('./profileInfo')
-
-const searchPeopleAPI = require('./searchPeople')
-
-
-// returns the data of the user, linkedIn username has been given as parameter
-const getProfileInfo = async (username) => {
+// Returns necessary profile information of the user, username has been given
+const getPersonProfileInfo = async (username) => {
     try {
-        const response = await profileInfoAPI.getResponse(username)
-        return response.data;
+        const response = await profileInfoAPI.getResponse(username);
+        const data = response.data;
+        return {
+            id: data.id,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            username: data.username,
+            headline: data.headline,
+            summary: data.summary,
+            country: data.geo.country,
+            city: data.geo.city,
+            countryCode: data.geo.countryCode,
+        };
     } catch (err) {
         console.error(`Failed to fetch profile for ${username}:`, err);
-        throw err; 
+        return null;
     }
 }
 
 
-// keyword: job name
-// start: page number
-const getPeopleSearched = async (keywords, start) => {
+// Return data in object format that cantains list of people
+// These people are search result of API call respect to the given keywords
+const getSearchPeopleData = async (keywords) => {
     try {
-        const response = await searchPeopleAPI.getResponse(keywords, start)
-        return response.data;
+        const response = await searchPeopleAPI.getResponse(keywords);
+        return response.data.data;
     } catch (err) {
         console.error(`Failed during searching people`, err);
-        throw err;
+        return null;
     }
 }
 
 
-function extractPeopleInfo(jsonData) {
-    if (!jsonData || !jsonData.data || !Array.isArray(jsonData.data.items)) {
-        console.error("Invalid JSON structure");
-        return [];
+// Returns list of usernames' of people in given list
+// this function helps ot extract usernames' from the output of function getSearchPeopleData
+const extractPeoplesUsername = (data) => {
+    const usernameList = [];
+
+    if (data.items !== null) {
+
+        data.items.forEach(person => {
+            usernameList.push(person.username);
+        })
     }
-  
-    return jsonData.data.items.map(person => ({
-        username: person.username,
-        fullName: person.fullName,
-        location: person.location
-    }));
+    return usernameList;
 }
 
 
-async function getAllPeopleSearched(keywords) {
-    let start = 0;
-    const peopleInList = [];
+// searches people respect to the keywords and at the end
+// return their necessary profile information in a list
+const searchAndGetPeopleInfo = async (keywords) => {
+    const data = await getSearchPeopleData(keywords);
+    const usernameList = extractPeoplesUsername(data);
 
-    while (true) {
-        try {
-            const response = await getPeopleSearched(keywords, start);
-            
-            // Check if items is null
-            if (!response || !response.data || response.data.items === null) {
-                break;
-            }
-
-            // Extract and append people info
-            const extracted = extractPeopleInfo(response);
-            peopleInList.push(...extracted);
-
-            start++; // Move to the next page
-        } catch (err) {
-            console.error("Error fetching people at page", start, ":", err);
-            break; // Exit on error
-        }
+    peopleInfoList = [];
+    for (const username of usernameList) {
+        const person = await getPersonProfileInfo(username);
+        peopleInfoList.push(person);
     }
 
-    return peopleInList;
+    return peopleInfoList;
 }
 
 
-async function printAllProfiles(keywords) {
-    try {
-        const peopleList = await getAllPeopleSearched(keywords);
-
-        for (const person of peopleList) {
-            if (!person.username) {
-                console.warn("Missing username for person:", person);
-                continue;
-            }
-
-            try {
-                const profile = await getProfileInfo(person.username);
-                console.log("Profile Info for", person.username, ":", profile);
-            } catch (err) {
-                console.error(`Could not fetch or print profile for ${person.username}`);
-            }
-        }
-    } catch (err) {
-        console.error("Failed to fetch or process people list:", err);
-    }
-}
-
-
-
-// Example usage
-//printAllProfiles("data science");
 
 
 app.listen(PORT, () => {
