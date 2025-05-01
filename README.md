@@ -10,14 +10,14 @@
 - [x] home page
 - [x] UserNavbar
 - [x] AdminNavbar
-- [ ] Authentication
+- [x] Authentication
 
 
 ### Backend
 
-- [ ] connecting backend with front-end
-- [ ] handling logging
-- [ ] handling sign up
+- [x] connecting backend with front-end
+- [x] handling logging
+- [x] handling sign up
 - [ ] Authentication
 - [ ] filtering people respect to their location
 - [ ] logging every registrion for admin dashboard
