@@ -115,7 +115,7 @@ export default function Admin() {
       <AdminNavbar />
       <div className="p-4 w-full">
         <h1 className="text-xl font-semibold mb-2">User List</h1>
-        <table className="w-full border border-red-300">
+        <table className="w-full border border-red-300 overflow-x-auto">
           <thead className="bg-red-200">
             <tr>
               <th className="border px-1 py-2 md:px-4 md:py-2">Name</th>

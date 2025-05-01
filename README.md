@@ -5,21 +5,21 @@
 
 ### Front-end
 
-- ~~Admin page~~
-- user page
-- home page
-- ~~UserNavbar~~
-- ~~AdminNavbar~~
-- Authentication
+- [x] ~~Admin page~~
+- [ ] user page
+- [ ] home page
+- [x] ~~UserNavbar~~
+- [x] ~~AdminNavbar~~
+- [ ] Authentication
 
 
 ### Backend
 
-- connecting backend with front-end
-- handling logging
-- handling sign up
-- Authentication
-- filtering people respect to their location
-- logging every registrion for admin dashboard
-- creating a database to hold the users
+- [ ] connecting backend with front-end
+- [ ] handling logging
+- [ ] handling sign up
+- [ ] Authentication
+- [ ] filtering people respect to their location
+- [ ] logging every registrion for admin dashboard
+- [ ] creating a database to hold the users
 
