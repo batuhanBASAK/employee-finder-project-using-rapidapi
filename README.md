@@ -5,20 +5,21 @@
 
 ### Front-end
 
-- Amin page
+- ~~Amin page~~
 - user page
 - home page
 - ~~UserNavbar~~
 - ~~AdminNavbar~~
- 
+- Authentication
 
 
 ### Backend
 
-- filtering people respect to their location
 - connecting backend with front-end
-- creating a database to hold the users
-- logging every registrion for admin dashboard
 - handling logging
 - handling sign up
+- Authentication
+- filtering people respect to their location
+- logging every registrion for admin dashboard
+- creating a database to hold the users
 

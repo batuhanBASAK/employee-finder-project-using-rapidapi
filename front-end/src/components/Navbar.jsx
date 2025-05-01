@@ -55,7 +55,7 @@ export default function Navbar() {
         <button
           onClick={toggleMenu}
           aria-label="Toggle Menu"
-          className="text-red-700"
+          className="text-red-700 hover:pointer"
         >
           {menuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
