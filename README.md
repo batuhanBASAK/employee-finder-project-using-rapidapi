@@ -5,7 +5,7 @@
 
 ### Front-end
 
-- ~~Amin page~~
+- ~~Admin page~~
 - user page
 - home page
 - ~~UserNavbar~~
