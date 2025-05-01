@@ -53,8 +53,8 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="md:h-screen">
-        <h2 className="text-2xl md:text-5xl tracking-normal font-semibold p-16 text-center">
+      <main className="md:h-screen flex flex-col justify-center items-center gap-4">
+        <h2 className="text-2xl md:text-5xl tracking-normal font-semibold p-16 text-center capitalize">
           Why this platform?
         </h2>
 
