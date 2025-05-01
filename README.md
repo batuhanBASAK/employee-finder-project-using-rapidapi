@@ -5,11 +5,11 @@
 
 ### Front-end
 
-- [x] ~~Admin page~~
+- [x] Admin page
 - [ ] user page
-- [ ] home page
-- [x] ~~UserNavbar~~
-- [x] ~~AdminNavbar~~
+- [x] home page
+- [x] UserNavbar
+- [x] AdminNavbar
 - [ ] Authentication
 
 

@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function UserNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -20,9 +20,6 @@ export default function UserNavbar() {
           <div className="flex gap-4">
             <Link to="/" className="text-red-600 hover:underline">
               Home
-            </Link>
-            <Link to="/about" className="text-red-600 hover:underline">
-              About
             </Link>
           </div>
         </div>
@@ -54,13 +51,6 @@ export default function UserNavbar() {
             onClick={toggleMenu}
           >
             Home
-          </Link>
-          <Link
-            to="/about"
-            className="text-red-600 hover:underline"
-            onClick={toggleMenu}
-          >
-            About
           </Link>
         </div>
       )}

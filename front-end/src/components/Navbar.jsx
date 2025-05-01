@@ -21,9 +21,6 @@ export default function Navbar() {
             <Link to="/" className="text-red-600 hover:underline">
               Home
             </Link>
-            <Link to="/about" className="text-red-600 hover:underline">
-              About
-            </Link>
           </div>
         </div>
 
@@ -70,13 +67,6 @@ export default function Navbar() {
             onClick={toggleMenu}
           >
             Home
-          </Link>
-          <Link
-            to="/about"
-            className="text-red-600 hover:underline"
-            onClick={toggleMenu}
-          >
-            About
           </Link>
           <Link
             to="/login"

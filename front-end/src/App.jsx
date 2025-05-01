@@ -5,7 +5,6 @@ import {
   Navigate,
 } from "react-router-dom";
 import Home from "./pages/Home";
-import About from "./pages/About";
 import Login from "./pages/Login";
 import SignUp from "./pages/Signup";
 import UserHomePage from "./pages/User";
@@ -23,7 +22,6 @@ function App() {
         <div className="container mx-auto">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/adminlogin" element={<AdminLogin />} />

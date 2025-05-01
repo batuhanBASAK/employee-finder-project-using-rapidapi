@@ -118,21 +118,21 @@ export default function Admin() {
         <table className="w-full border border-red-300 overflow-x-auto">
           <thead className="bg-red-200">
             <tr>
-              <th className="border px-1 py-2 md:px-4 md:py-2">Name</th>
-              <th className="border px-1 py-2 md:px-4 md:py-2">Surname</th>
-              <th className="border px-1 py-2 md:px-4 md:py-2">Email</th>
-              <th className="border px-1 py-2 md:px-4 md:py-2">Company Name</th>
-              <th className="border px-1 py-2 md:px-4 md:py-2">Phone</th>
+              <th className="border px-4 py-2">Name</th>
+              <th className="border px-4 py-2">Surname</th>
+              <th className="border px-4 py-2">Email</th>
+              <th className="border px-4 py-2">Company Name</th>
+              <th className="border px-4 py-2">Phone</th>
             </tr>
           </thead>
           <tbody>
             {users.map((user, index) => (
               <tr key={index} className="odd:bg-white even:bg-red-50">
-                <td className="border px-1 py-2 md:px-4 md:py-2">{user.name}</td>
-                <td className="border px-1 py-2 md:px-4 md:py-2">{user.surname}</td>
-                <td className="border px-1 py-2 md:px-4 md:py-2">{user.email}</td>
-                <td className="border px-1 py-2 md:px-4 md:py-2">{user.company}</td>
-                <td className="border px-1 py-2 md:px-4 md:py-2">{user.phone}</td>
+                <td className="border px-4 py-2">{user.name}</td>
+                <td className="border px-4 py-2">{user.surname}</td>
+                <td className="border px-4 py-2">{user.email}</td>
+                <td className="border px-4 py-2">{user.company}</td>
+                <td className="border px-4 py-2">{user.phone}</td>
               </tr>
             ))}
           </tbody>
