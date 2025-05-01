@@ -8,8 +8,8 @@
 - Amin page
 - user page
 - home page
-- UserNavbar
-- AdminNavbar
+- ~~UserNavbar~~
+- ~~AdminNavbar~~
  
 
 

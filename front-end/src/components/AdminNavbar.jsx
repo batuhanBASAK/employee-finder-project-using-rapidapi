@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import { useState } from 'react';
 
-export default function Navbar() {
+export default function AdminNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -25,22 +25,6 @@ export default function Navbar() {
               About
             </Link>
           </div>
-        </div>
-
-        {/* Right side - Auth buttons */}
-        <div className="flex gap-2">
-          <Link
-            to="/login"
-            className="px-4 py-1 border border-red-600 text-red-600 rounded hover:bg-red-50"
-          >
-            Login
-          </Link>
-          <Link
-            to="/signup"
-            className="px-4 py-1 bg-red-600 text-white rounded hover:bg-red-700"
-          >
-            Sign Up
-          </Link>
         </div>
       </nav>
 
@@ -77,20 +61,6 @@ export default function Navbar() {
             onClick={toggleMenu}
           >
             About
-          </Link>
-          <Link
-            to="/login"
-            className="text-red-600 hover:underline"
-            onClick={toggleMenu}
-          >
-            Login
-          </Link>
-          <Link
-            to="/signup"
-            className="text-red-600 hover:underline"
-            onClick={toggleMenu}
-          >
-            Sign Up
           </Link>
         </div>
       )}
