@@ -18,7 +18,7 @@
 - [x] connecting backend with front-end
 - [x] handling logging
 - [x] handling sign up
-- [ ] Authentication
+- [x] Authentication
 - [ ] filtering people respect to their location
 - [ ] logging every registrion for admin dashboard
 - [ ] creating a database to hold the users

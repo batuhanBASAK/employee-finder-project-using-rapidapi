@@ -4,7 +4,7 @@ import { useAuth } from "./AuthContext";
 const ProtectedRoutesAdmin = () => {
   const { isAdminLoggedIn } = useAuth();
 
-  return isAdminLoggedIn ? <Outlet /> : <Navigate to="/" />;
+  return isAdminLoggedIn ? <Outlet /> : <Navigate to="/adminlogin" />;
 };
 
 export default ProtectedRoutesAdmin;

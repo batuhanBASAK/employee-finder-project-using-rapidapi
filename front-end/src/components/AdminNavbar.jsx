@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "../utils/AuthContext";  // Import the useAuth hook
 
 export default function AdminNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { logout } = useAuth(); // Access logout function from context
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -23,6 +25,14 @@ export default function AdminNavbar() {
             </Link>
           </div>
         </div>
+
+        {/* Logout Link */}
+        <button
+          onClick={logout}
+          className="text-red-600 hover:underline"
+        >
+          Logout
+        </button>
       </nav>
 
       {/* Mobile navbar */}
@@ -52,6 +62,12 @@ export default function AdminNavbar() {
           >
             Home
           </Link>
+          <button
+            onClick={logout}
+            className="text-red-600 hover:underline"
+          >
+            Logout
+          </button>
         </div>
       )}
     </>

@@ -8,10 +8,12 @@ export const AuthProvider = ({ children }) => {
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
 
+  // Check for user login status (via token) on mount
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (token) {
+      // Checking if it's a user token
       axios
         .get("http://localhost:3000/user-profile", {
           headers: {
@@ -20,7 +22,7 @@ export const AuthProvider = ({ children }) => {
         })
         .then((res) => {
           setIsUserLoggedIn(true);
-          setUser(res.data); // e.g., { email: "user@example.com" }
+          setUser(res.data); // { email: "user@example.com" }
         })
         .catch((err) => {
           console.error("Token is invalid or expired:", err);
@@ -28,10 +30,25 @@ export const AuthProvider = ({ children }) => {
           setIsUserLoggedIn(false);
           setUser(null);
         });
+
+      // Checking if it's an admin token
+      axios
+        .get("http://localhost:3000/admin-profile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(() => {
+          setIsAdminLoggedIn(true);
+        })
+        .catch((err) => {
+          console.error("Admin token is invalid or expired:", err);
+          setIsAdminLoggedIn(false);
+        });
     }
   }, []);
 
-  // 🔐 Logout function
+  // 🔐 Logout function (handles both user and admin)
   const logout = () => {
     localStorage.removeItem("token");
     setIsUserLoggedIn(false);
