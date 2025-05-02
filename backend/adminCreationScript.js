@@ -1,11 +1,8 @@
 const mongoose = require('mongoose');
-const Admin = require('./models/Admin'); // Correct model
-require('dotenv').config(); // Still needed for ADMIN credentials
+const Admin = require('./models/Admin');
+require('dotenv').config();
 
 const SALT_ROUNDS = 10;
-
-// Hardcoded MongoDB URI
-const mongoUri = 'mongodb://localhost/projectdb';
 
 // Admin credentials from .env
 const adminEmail = process.env.ADMIN_EMAIL;
@@ -13,7 +10,7 @@ const adminPassword = process.env.ADMIN_PASSWORD;
 
 async function createAdmin() {
   try {
-    await mongoose.connect(mongoUri);
+    await mongoose.connect("mongodb://localhost/projectdb");
 
     const existingAdmin = await Admin.findOne({ email: adminEmail });
     if (existingAdmin) {
@@ -35,4 +32,6 @@ async function createAdmin() {
   }
 }
 
-createAdmin();
+(async () => {
+  await createAdmin();
+})();

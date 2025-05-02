@@ -9,7 +9,7 @@ require('dotenv').config();
 
 const { getInformationOfFilteredPeople } = require('./rapidapi_linkedIn_scraper');
 const User = require('./models/User'); // make sure this path matches where your User.js is
-const Admin = require('./models/admin'); // import the admin model
+const Admin = require('./models/Admin'); // import the admin model
 
 const SALT_ROUNDS = 10;
 const PORT = process.env.PORT || 3000;
