@@ -13,7 +13,11 @@ export default function SignUp() {
   } = useAuth();
   const navigate = useNavigate();
 
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
+  const [company, setCompany] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -37,7 +41,11 @@ export default function SignUp() {
 
     try {
       const res = await axios.post("http://localhost:3000/signup", {
+        name,
+        surname,
         email,
+        company,
+        phone,
         password,
       });
 
@@ -72,12 +80,42 @@ export default function SignUp() {
         {success && <p className="text-green-600">{success}</p>}
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <input
+            type="text"
+            placeholder="First Name"
+            className="p-2 border rounded"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Last Name"
+            className="p-2 border rounded"
+            value={surname}
+            onChange={(e) => setSurname(e.target.value)}
+            required
+          />
+          <input
             type="email"
             placeholder="Email"
             className="p-2 border rounded"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+          />
+          <input
+            type="text"
+            placeholder="Company"
+            className="p-2 border rounded"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Phone Number"
+            className="p-2 border rounded"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
           />
           <input
             type="password"

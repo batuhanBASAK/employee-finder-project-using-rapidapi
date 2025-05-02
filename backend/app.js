@@ -1,46 +1,51 @@
 const express = require('express');
 const app = express();
-
 const cors = require("cors");
 const bodyParser = require("body-parser");
-
-const bcrypt = require("bcrypt");
-const SALT_ROUNDS = 10;
-
 const jwt = require("jsonwebtoken");
+const mongoose = require('mongoose');
+require('dotenv').config();
 
 const { getInformationOfFilteredPeople } = require('./rapidapi_linkedIn_scraper');
+const User = require('./models/User'); // make sure this path matches where your User.js is
+const Admin = require('./models/admin'); // import the admin model
 
+const SALT_ROUNDS = 10;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
-require('dotenv').config()
-const PORT = process.env.PORT
-
-// In-memory mock user storage, for testing
-const users = [];
-// Hardcoded admin account for testing
-const admin = { email: "admin@example.com", password: "admin123" };
-
-
+// MongoDB connection
+mongoose.connect("mongodb://localhost/projectdb")
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 // Sign up route
 app.post("/signup", async (req, res) => {
-  const { email, password } = req.body;
+  const { name, surname, email, company, phone, password } = req.body;
 
   if (!email || !password)
     return res.status(400).json({ message: "Email and password are required." });
 
-  const existingUser = users.find(user => user.email === email);
-  if (existingUser)
-    return res.status(409).json({ message: "User already exists." });
-
   try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser)
+      return res.status(409).json({ message: "User already exists." });
+
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-    const newUser = { email, password: hashedPassword };
-    users.push(newUser);
+
+    const newUser = new User({
+      name,
+      surname,
+      email,
+      company,
+      phone,
+      password: hashedPassword
+    });
+
+    await newUser.save();
 
     const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
@@ -51,37 +56,50 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-// Login route for regular users
+// Login route
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  const user = users.find(user => user.email === email);
-  if (!user)
-    return res.status(401).json({ message: "Invalid credentials." });
+  try {
+    const user = await User.findOne({ email });
+    if (!user)
+      return res.status(401).json({ message: "Invalid credentials." });
 
-  const isPasswordValid = await bcrypt.compare(password, user.password);
-  if (!isPasswordValid)
-    return res.status(401).json({ message: "Invalid credentials." });
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid)
+      return res.status(401).json({ message: "Invalid credentials." });
 
-  const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-  res.json({ message: "Login successful.", token });
-});
-
-// Admin login route
-app.post("/adminlogin", async (req, res) => {
-  const { email, password } = req.body;
-
-  // Check if it's a pseudo admin login
-  if (email === admin.email && password === admin.password) {
-    const token = jwt.sign({ email, role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    return res.json({ message: "Admin login successful.", token });
-  } else {
-    return res.status(401).json({ message: "Invalid admin credentials." });
+    res.json({ message: "Login successful.", token });
+  } catch (err) {
+    console.error("Error during login:", err);
+    res.status(500).json({ message: "Internal server error." });
   }
 });
 
-// Authenticate Token middleware
+// Admin login
+app.post("/adminlogin", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const admin = await Admin.findOne({ email });
+    if (!admin)
+      return res.status(401).json({ message: "Invalid admin credentials." });
+
+    const isPasswordValid = await admin.comparePassword(password);
+    if (!isPasswordValid)
+      return res.status(401).json({ message: "Invalid admin credentials." });
+
+    const token = jwt.sign({ email, role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    return res.json({ message: "Admin login successful.", token });
+  } catch (err) {
+    console.error("Error during admin login:", err);
+    res.status(500).json({ message: "Internal server error." });
+  }
+});
+
+// Middleware: authenticate token
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
@@ -95,7 +113,7 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-// Admin-specific route (example)
+// Middleware: check admin role
 const authenticateAdmin = (req, res, next) => {
   if (req.user.role !== 'admin') {
     return res.status(403).json({ message: "Access denied. Admins only." });
@@ -103,18 +121,35 @@ const authenticateAdmin = (req, res, next) => {
   next();
 };
 
-// Admin profile route (for testing)
+// Admin-only route
 app.get("/admin-profile", authenticateToken, authenticateAdmin, (req, res) => {
   res.json({ message: "Welcome to the admin panel!", email: req.user.email });
 });
 
 // User profile route
-app.get("/user-profile", authenticateToken, (req, res) => {
-  const user = users.find(u => u.email === req.user.email);
-  if (!user) return res.status(404).json({ message: "User not found." });
-  res.json({ email: user.email });
+app.get("/user-profile", authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.user.email }).select("-password");
+    if (!user) return res.status(404).json({ message: "User not found." });
+    res.json(user);
+  } catch (err) {
+    console.error("Error fetching user:", err);
+    res.status(500).json({ message: "Internal server error." });
+  }
 });
 
+// Route: Get all users (admin only)
+app.get("/admin/users", authenticateToken, authenticateAdmin, async (req, res) => {
+  try {
+    const users = await User.find().select("-password"); // Exclude passwords
+    res.json(users);
+  } catch (err) {
+    console.error("Error fetching users:", err);
+    res.status(500).json({ message: "Internal server error." });
+  }
+});
+
+// Start server
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
 });
