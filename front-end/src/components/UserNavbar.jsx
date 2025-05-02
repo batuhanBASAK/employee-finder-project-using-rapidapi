@@ -21,7 +21,7 @@ export default function UserNavbar() {
       <nav className="hidden md:flex p-4 items-center justify-between">
         <div className="flex items-center gap-6">
           <Link to="/" className="text-2xl font-bold text-red-700">
-            Optiwisdom
+            Brand
           </Link>
 
           <div className="flex gap-4">

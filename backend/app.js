@@ -9,12 +9,12 @@ const SALT_ROUNDS = 10;
 
 const jwt = require("jsonwebtoken");
 
+const { getInformationOfFilteredPeople } = require('./rapidapi_linkedIn_scraper');
+
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-
-const profileInfoAPI = require('./profileInfo');
-const searchPeopleAPI = require('./searchPeople');
 
 require('dotenv').config()
 const PORT = process.env.PORT
@@ -24,60 +24,7 @@ const users = [];
 // Hardcoded admin account for testing
 const admin = { email: "admin@example.com", password: "admin123" };
 
-// Utility functions for profile and people search
-const getPersonProfileInfo = async (username) => {
-  try {
-    const response = await profileInfoAPI.getResponse(username);
-    const data = response.data;
-    return {
-      id: data.id,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      username: data.username,
-      headline: data.headline,
-      summary: data.summary,
-      country: data.geo.country,
-      city: data.geo.city,
-      countryCode: data.geo.countryCode,
-    };
-  } catch (err) {
-    console.error(`Failed to fetch profile for ${username}:`, err);
-    return null;
-  }
-};
 
-const getSearchPeopleData = async (keywords) => {
-  try {
-    const response = await searchPeopleAPI.getResponse(keywords);
-    return response.data.data;
-  } catch (err) {
-    console.error(`Failed during searching people`, err);
-    return null;
-  }
-};
-
-const extractPeoplesUsername = (data) => {
-  const usernameList = [];
-  if (data?.items) {
-    data.items.forEach(person => {
-      usernameList.push(person.username);
-    });
-  }
-  return usernameList;
-};
-
-const searchAndGetPeopleInfo = async (keywords) => {
-  const data = await getSearchPeopleData(keywords);
-  const usernameList = extractPeoplesUsername(data);
-
-  const peopleInfoList = [];
-  for (const username of usernameList) {
-    const person = await getPersonProfileInfo(username);
-    if (person) peopleInfoList.push(person);
-  }
-
-  return peopleInfoList;
-};
 
 // Sign up route
 app.post("/signup", async (req, res) => {

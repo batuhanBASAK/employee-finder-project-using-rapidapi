@@ -14,7 +14,7 @@ export default function Navbar() {
         {/* Left side - Brand and Nav links */}
         <div className="flex items-center gap-6">
           <Link to="/" className="text-2xl font-bold text-red-700">
-            Optiwisdom
+            Brand
           </Link>
 
           <div className="flex gap-4">
