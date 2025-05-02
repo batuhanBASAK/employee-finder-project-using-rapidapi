@@ -5,21 +5,12 @@
 
 ### Front-end
 
-- [x] Admin page
 - [ ] user page
-- [x] home page
-- [x] UserNavbar
-- [x] AdminNavbar
-- [x] Authentication
+- [ ] Convert web page language to Turkish
+- [ ] Display search actions of users on Admin page
 
 
 ### Backend
 
-- [x] connecting backend with front-end
-- [x] handling logging
-- [x] handling sign up
-- [x] Authentication
-- [x] filtering people respect to their location
-- [x] logging every registrion for admin dashboard
-- [x] creating a database to hold the users
-
+- [ ] Improve filters (Location, Age, Education, Languages known)
+- [ ] Log searching actions of users

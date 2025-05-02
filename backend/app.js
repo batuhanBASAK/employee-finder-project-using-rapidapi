@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 
-const { getInformationOfFilteredPeople } = require('./rapidapi_linkedIn_scraper');
+const { searchAndGetPeopleInfo } = require('./rapidapi_linkedIn_scraper');
 const User = require('./models/User'); // make sure this path matches where your User.js is
 const Admin = require('./models/Admin'); // import the admin model
 
@@ -149,6 +149,29 @@ app.get("/admin/users", authenticateToken, authenticateAdmin, async (req, res) =
     res.status(500).json({ message: "Internal server error." });
   }
 });
+
+
+
+app.post("/search-people", authenticateToken, async (req, res) => {
+  const { keywords} = req.body;
+
+  if (!keywords) {
+    return res.status(400).json({ message: "Keywords are required." });
+  }
+
+  try {
+    const filteredPeople = await searchAndGetPeopleInfo(keywords);
+    if (filteredPeople.length === 0) {
+      return res.status(404).json({ message: "No filtered people found." });
+    }
+
+    res.json({ filteredPeople });
+  } catch (err) {
+    console.error("Error fetching filtered people:", err);
+    res.status(500).json({ message: "Internal server error." });
+  }
+});
+
 
 // Start server
 app.listen(PORT, () => {

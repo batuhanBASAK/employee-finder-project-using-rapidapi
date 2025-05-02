@@ -57,26 +57,7 @@ const searchAndGetPeopleInfo = async (keywords) => {
 };
 
 
-const getInformationOfFilteredPeople = async (keywords, country, city) => {
-  const peopleInfoList = await searchAndGetPeopleInfo(keywords);
-
-  // Normalize inputs for case-insensitive matching, only if they are provided
-  const normalizedCountry = country?.toLowerCase();
-  const normalizedCity = city?.toLowerCase();
-
-  const filteredPeopleList = peopleInfoList.filter(person => {
-    // If both country and city are provided, filter by both
-    const matchesCountry = normalizedCountry ? person.country?.toLowerCase() === normalizedCountry : true;
-    const matchesCity = normalizedCity ? person.city?.toLowerCase() === normalizedCity : true;
-
-    // Include person if country and/or city match, depending on which is provided
-    return matchesCountry && matchesCity;
-  });
-
-  return filteredPeopleList;
-};
-
 
 module.exports = {
-  getInformationOfFilteredPeople
+  searchAndGetPeopleInfo
 };

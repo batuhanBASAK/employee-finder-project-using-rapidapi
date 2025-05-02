@@ -7,65 +7,62 @@ export const AuthProvider = ({ children }) => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null); // 👈 Add a token state
 
   // Check for user login status (via token) on mount
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken); // Store token here in the context
 
-    if (token) {
-      // Checking if it's a user token
       axios
         .get("http://localhost:3000/user-profile", {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${storedToken}`,
           },
         })
         .then((res) => {
           setIsUserLoggedIn(true);
-          setUser(res.data); // { email: "user@example.com" }
+          setUser(res.data);
         })
-        .catch((err) => {
-          console.error("Token is invalid or expired:", err);
-          localStorage.removeItem("token");
+        .catch(() => {
+          // Checking if it's an admin token
+          axios
+            .get("http://localhost:3000/admin-profile", {
+              headers: {
+                Authorization: `Bearer ${storedToken}`,
+              },
+            })
+            .then(() => {
+              setIsAdminLoggedIn(true);
+            })
+            .catch((err) => {
+              console.error("Admin token is invalid or expired:", err);
+              setIsAdminLoggedIn(false);
+            });
+
           setIsUserLoggedIn(false);
           setUser(null);
-        });
-
-      // Checking if it's an admin token
-      axios
-        .get("http://localhost:3000/admin-profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then(() => {
-          setIsAdminLoggedIn(true);
-        })
-        .catch((err) => {
-          console.error("Admin token is invalid or expired:", err);
-          setIsAdminLoggedIn(false);
         });
     }
   }, []);
 
-  // 🔐 Logout function (handles both user and admin)
   const logout = () => {
     localStorage.removeItem("token");
     setIsUserLoggedIn(false);
     setIsAdminLoggedIn(false);
     setUser(null);
+    setToken(null); // clear token from context
   };
 
   return (
     <AuthContext.Provider
       value={{
         isUserLoggedIn,
-        setIsUserLoggedIn,
         isAdminLoggedIn,
-        setIsAdminLoggedIn,
         user,
-        setUser,
-        logout, // 👈 include logout in context
+        token, // Expose token here
+        logout,
       }}
     >
       {children}
@@ -73,5 +70,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use auth context
 export const useAuth = () => useContext(AuthContext);

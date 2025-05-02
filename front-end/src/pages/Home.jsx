@@ -81,7 +81,7 @@ export default function Home() {
               Contact Easily
             </h3>
             <p className="text-base">
-              You can contact with the one you want easily via phone or email
+              You can contact with the one you want easily via email
             </p>
           </div>
         </section>
