@@ -173,6 +173,19 @@ app.post("/search-people", authenticateToken, async (req, res) => {
 });
 
 
+app.get("/me", authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.user.email }).select("-password");
+    if (!user) return res.status(404).json({ message: "User not found." });
+    res.json(user);
+  } catch (err) {
+    console.error("Error fetching user:", err);
+    res.status(500).json({ message: "Internal server error." });
+  }
+});
+
+
+
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);

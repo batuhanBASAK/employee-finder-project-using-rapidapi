@@ -38,6 +38,7 @@ export const AuthProvider = ({ children }) => {
             })
             .catch((err) => {
               console.error("Admin token is invalid or expired:", err);
+              localStorage.removeItem("token");
               setIsAdminLoggedIn(false);
             });
 
@@ -61,7 +62,7 @@ export const AuthProvider = ({ children }) => {
         isUserLoggedIn,
         isAdminLoggedIn,
         user,
-        token, // Expose token here
+        token, 
         logout,
       }}
     >

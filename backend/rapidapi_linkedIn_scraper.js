@@ -1,17 +1,14 @@
 const profileInfoAPI = require('./profileInfo');
 const searchPeopleAPI = require('./searchPeople');
-// const emailAPI = require('./getEmail');
 
 
 // Internal utility functions
 const getPersonProfileInfo = async (username) => {
   try {
 
-    // const emailResponse = await emailAPI.getResponse(username);
-    // const emailResposeData = emailResponse.data;
-
     const profileresponse = await profileInfoAPI.getResponse(username);
     const data = profileresponse.data;
+
     return {
       id: data.id,
       firstName: data.firstName,
@@ -24,7 +21,6 @@ const getPersonProfileInfo = async (username) => {
       countryCode: data.geo.countryCode,
       profilePicture: data.profilePicture,
       educations: data.educations,
-      // emails: emailResposeData.emails,
     };
   } catch (err) {
     if (err.response && err.response.status === 429) {
@@ -38,45 +34,17 @@ const getPersonProfileInfo = async (username) => {
 };
 
 
-// const getSearchPeopleData = async (keywords) => {
-//   const usernameList = [];
-
-//   try {
-//     for (let start = 0; start <= 5; start++) {
-//       const response = await searchPeopleAPI.getResponse(keywords, start);
-//       const data = response.data;
-
-//       if (data && data.data && data.data.items) {
-//         for (const item of data.data.items) {
-//           usernameList.push(item.username);
-//         }
-//       }
-//     }
-
-//     return usernameList;
-//   } catch (err) {
-//     if (err.response && err.response.status === 429) {
-//       console.error("Rate limit exceeded. Please wait and try again.");
-//     } else {
-//       console.error("Failed during searching people:", err);
-//     }
-//     return [];
-//   }
-// };
-
-
-
 const getSearchPeopleData = async (keywords) => {
   const usernameList = [];
 
   try {
     // Create an array of start values
-    const startValues = [...Array(10).keys()];
+    const startValues = [...Array(50).keys()];
 
 
     // Create all requests in parallel
     const requests = startValues.map((start) =>
-      searchPeopleAPI.getResponse(keywords, start)
+      searchPeopleAPI.getResponse(keywords, start) // search for 50 pages
     );
 
     // Await all results safely
@@ -87,7 +55,9 @@ const getSearchPeopleData = async (keywords) => {
         const data = result.value.data;
         if (data && data.data && Array.isArray(data.data.items)) {
           for (const item of data.data.items) {
-            usernameList.push(item.username);
+            if (!usernameList.includes(item.username)) {
+              usernameList.push(item.username);
+            }
           }
         }
       } else if (
@@ -106,8 +76,6 @@ const getSearchPeopleData = async (keywords) => {
     return [];
   }
 };
-
-
 
 
 

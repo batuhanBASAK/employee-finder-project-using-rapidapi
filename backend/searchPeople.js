@@ -11,7 +11,6 @@ module.exports = {
         params: {
             keywords: keywords,
             start: start,
-            geo: '102424322'
         },
         headers: {
             'x-rapidapi-key': API_KEY,
