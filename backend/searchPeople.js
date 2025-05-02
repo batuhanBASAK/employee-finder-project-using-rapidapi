@@ -10,6 +10,7 @@ module.exports = {
         url: 'https://linkedin-data-api.p.rapidapi.com/search-people',
         params: {
             keywords: keywords,
+            // geo: '102424322'
         },
         headers: {
             'x-rapidapi-key': API_KEY,

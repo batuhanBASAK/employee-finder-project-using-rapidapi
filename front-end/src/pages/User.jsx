@@ -9,14 +9,16 @@ export default function User() {
   const [keywords, setKeywords] = useState('');
   const [filteredPeople, setFilteredPeople] = useState([]);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // 👈 loading state
 
   const handleSearch = async () => {
-    // Clear any previous errors or results
     setError('');
     setFilteredPeople([]);
+    setLoading(true); // 👈 start loading
 
     if (!keywords) {
       setError('Keywords are required.');
+      setLoading(false); // 👈 stop loading if validation fails
       return;
     }
 
@@ -26,13 +28,12 @@ export default function User() {
         { keywords },
         {
           headers: {
-            'Authorization': `Bearer ${token}`, // Use token from context
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         }
       );
 
-      // Check if the response contains filtered people
       if (response.data && response.data.filteredPeople) {
         setFilteredPeople(response.data.filteredPeople);
       } else {
@@ -41,12 +42,12 @@ export default function User() {
     } catch (err) {
       console.error('Error during search:', err);
       if (err.response) {
-        // Handle error response from the server
         setError(err.response.data.message || 'An error occurred during the search.');
       } else {
-        // Handle network errors or issues
         setError('Network error occurred.');
       }
+    } finally {
+      setLoading(false); // 👈 always stop loading at the end
     }
   };
 
@@ -69,8 +70,9 @@ export default function User() {
         <button
           onClick={handleSearch}
           className="p-4 bg-red-600 text-white rounded hover:bg-red-700"
+          disabled={loading} // 👈 disable while loading
         >
-          Search
+          {loading ? 'Searching...' : 'Search'}
         </button>
       </div>
 
@@ -78,14 +80,19 @@ export default function User() {
 
       {filteredPeople.length > 0 && (
         <div className="mt-6">
-          <h2 className="text-xl font-bold text-red-700">People Found</h2>
+          <h2 className="text-xl font-bold text-red-700">{filteredPeople.length} People Found</h2>
           <ul>
             {filteredPeople.map((person, index) => (
               <li key={index} className="mt-2">
+                {person.profilePicture && (
+                  <img src={person.profilePicture} alt="profile" className="w-24 h-24 object-cover mb-2" />
+                )}
                 <p><strong>{person.firstName} {person.lastName}</strong></p>
                 <p>Username: {person.username}</p>
                 <p>Headline: {person.headline}</p>
                 <p>Location: {person.city}, {person.country}</p>
+                <p><strong>Summary:</strong></p>
+                <p>{person.summary}</p>
               </li>
             ))}
           </ul>

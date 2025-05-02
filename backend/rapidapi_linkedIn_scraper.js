@@ -1,11 +1,17 @@
 const profileInfoAPI = require('./profileInfo');
 const searchPeopleAPI = require('./searchPeople');
+// const emailAPI = require('./getEmail');
+
 
 // Internal utility functions
 const getPersonProfileInfo = async (username) => {
   try {
-    const response = await profileInfoAPI.getResponse(username);
-    const data = response.data;
+
+    // const emailResponse = await emailAPI.getResponse(username);
+    // const emailResposeData = emailResponse.data;
+
+    const profileresponse = await profileInfoAPI.getResponse(username);
+    const data = profileresponse.data;
     return {
       id: data.id,
       firstName: data.firstName,
@@ -16,9 +22,17 @@ const getPersonProfileInfo = async (username) => {
       country: data.geo.country,
       city: data.geo.city,
       countryCode: data.geo.countryCode,
+      profilePicture: data.profilePicture,
+      educations: data.educations,
+      // emails: emailResposeData.emails,
     };
   } catch (err) {
-    console.error(`Failed to fetch profile for ${username}:`, err);
+    if (err.response && err.response.status === 429) {
+      console.error("Rate limit exceeded. Please wait and try again.");
+    } else {
+      console.error(`Failed to fetch profile for ${username}:`, err);
+    }
+    
     return null;
   }
 };
@@ -28,7 +42,11 @@ const getSearchPeopleData = async (keywords) => {
     const response = await searchPeopleAPI.getResponse(keywords);
     return response.data.data;
   } catch (err) {
-    console.error(`Failed during searching people`, err);
+    if (err.response && err.response.status === 429) {
+      console.error("Rate limit exceeded. Please wait and try again.");
+    } else {
+      console.error(`Failed during searching people`, err);
+    }
     return null;
   }
 };
@@ -53,6 +71,7 @@ const searchAndGetPeopleInfo = async (keywords) => {
     if (person) peopleInfoList.push(person);
   }
 
+  console.log(peopleInfoList);
   return peopleInfoList;
 };
 

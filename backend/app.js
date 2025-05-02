@@ -162,7 +162,7 @@ app.post("/search-people", authenticateToken, async (req, res) => {
   try {
     const filteredPeople = await searchAndGetPeopleInfo(keywords);
     if (filteredPeople.length === 0) {
-      return res.status(404).json({ message: "No filtered people found." });
+      return res.status(404).json({ message: "No people found! Please try again" });
     }
 
     res.json({ filteredPeople });
