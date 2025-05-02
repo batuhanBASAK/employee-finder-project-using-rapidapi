@@ -19,7 +19,7 @@
 - [x] handling logging
 - [x] handling sign up
 - [x] Authentication
-- [ ] filtering people respect to their location
+- [x] filtering people respect to their location
 - [x] logging every registrion for admin dashboard
 - [x] creating a database to hold the users
 
