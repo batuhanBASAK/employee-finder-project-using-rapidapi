@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import axios from "axios";
@@ -8,8 +8,16 @@ export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  const { isUserLoggedIn, isAdminLoggedIn, setIsAdminLoggedIn } = useAuth(); // we need to update the admin login state
   const navigate = useNavigate();
-  const { setIsAdminLoggedIn } = useAuth(); // we need to update the admin login state
+
+  useEffect(() => {
+    if (isUserLoggedIn) navigate("/user");
+    if (isAdminLoggedIn) navigate("/admin");
+  }, [isUserLoggedIn, isAdminLoggedIn, navigate]);
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();

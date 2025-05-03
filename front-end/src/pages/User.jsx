@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../utils/AuthContext";
 import UserNavbar from "../components/UserNavbar";
 import LoadingMessage from "../components/LoadingMessage";
+import ScrollToTopButton from "../components/ScrollToTopButton";
 import axios from "axios";
 
 export default function User() {
@@ -79,6 +80,7 @@ export default function User() {
   return (
     <>
       <UserNavbar />
+      <ScrollToTopButton />
       <h1 className="text-2xl font-bold p-4">User Home Page</h1>
       {userInfo && (
         <p className="mt-4 text-lg p-4">
@@ -120,11 +122,11 @@ export default function User() {
           <h2 className="text-xl font-bold text-red-700">
             {filteredPeople.length} People Found
           </h2>
-          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
             {filteredPeople.map((person, index) => (
               <li
                 key={index}
-                className="mt-2 border-2 border-red-700 p-4 rounded"
+                className="mt-2 border-2 border-red-700 p-4 rounded bg-stone-50"
               >
                 {person.profilePicture ? (
                   <img
@@ -149,27 +151,68 @@ export default function User() {
                   </svg>
                 )}
                 <div>
-                  <p className="text-center text-lg font-semibold mb-4">
+                  <p className="text-center text-xl mb-4">
                     <strong>
                       {person.firstName} {person.lastName}
                     </strong>
                   </p>
                   <p>
-                    <strong>Username:</strong> {person.username}
+                    <strong className="text-lg font-semibold">Headline</strong>
+                    <hr />
+                    {person.headline}
                   </p>
                   <p>
-                    <strong>Headline:</strong> {person.headline}
+                    <strong className="text-lg font-semibold">Location</strong>
+                    <hr />
+                    {person.city}, {person.country}
                   </p>
                   <p>
-                    <strong>Location:</strong> {person.city}, {person.country}
-                  </p>
-                  <p>
-                    <strong>Summary:</strong>
+                    <strong className="text-lg font-semibold">Summary</strong>
+                    <hr />
                   </p>
                   <p>{person.summary ? person.summary : "N/A"}</p>
+
                   <p>
-                    <strong>Email:</strong>{" "}
-                    {person.email ? person.email : "N/A"}
+                    <strong className="text-lg font-semibold">Education</strong>
+                    <hr />
+                  </p>
+                  {person.education && person.education.length > 0 ? (
+                    <div className="mt-4">
+                      <p className="font-semibold">Education:</p>
+                      <ul className="list-disc pl-5 mt-2">
+                        {person.education.map((edu, eduIndex) => (
+                          <li key={eduIndex} className="mb-2">
+                            <p className="font-semibold">{edu.schoolName}</p>
+                            <p>
+                              {edu.degree} in {edu.fieldOfStudy}
+                            </p>
+                            <p>
+                              {edu.start?.year} - {edu.end?.year}
+                            </p>
+                            {edu.url && (
+                              <a
+                                href={edu.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-red-600 underline"
+                              >
+                                Visit School
+                              </a>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : (<p>N/A</p>)}
+
+                  <p>
+                    <p>
+                      <strong className="text-lg font-semibold">
+                        Email
+                      </strong>
+                      <hr />
+                    </p>
+                    {person.emails ? person.emails : "N/A"}
                   </p>
                 </div>
               </li>

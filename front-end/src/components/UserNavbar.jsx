@@ -18,7 +18,7 @@ export default function UserNavbar() {
   return (
     <>
       {/* Desktop navbar */}
-      <nav className="hidden md:flex p-4 items-center justify-between">
+      <nav className="hidden md:flex p-4 items-center justify-between bg-stone-50">
         <div className="flex items-center gap-6">
           <Link to="/" className="text-2xl font-bold text-red-700">
             Brand
@@ -39,7 +39,7 @@ export default function UserNavbar() {
       </nav>
 
       {/* Mobile navbar */}
-      <nav className="md:hidden p-4 flex items-center justify-between">
+      <nav className="md:hidden p-4 flex items-center justify-between bg-stone-50">
         <Link to="/" className="text-2xl font-bold text-red-700">
           Optiwisdom
         </Link>
@@ -54,7 +54,7 @@ export default function UserNavbar() {
 
       {/* Mobile Menu Items */}
       {menuOpen && (
-        <div className="md:hidden px-4 pb-4 flex flex-col gap-4">
+        <div className="md:hidden px-4 pb-4 flex flex-col gap-4 bg-stone-50">
           <Link
             to="/"
             className="text-red-600 hover:underline"

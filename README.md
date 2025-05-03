@@ -6,10 +6,10 @@
 ### Front-end
 
 - [ ] User Page: Add/Improve filters (Location, Age, Education, Languages known)
-- [ ] Display search actions of users on Admin page
+- [x] Display search actions of users on Admin page
 
 
 ### Backend
 
-- [ ] Handle email issue for API
-- [ ] Log searching actions of users on database
+- [ ] ~~Handle email issue for API~~ (API email requesting has temporarily unavailable.)
+- [x] Log searching actions of users on database

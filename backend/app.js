@@ -7,6 +7,10 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 
+const ActionLog = require('./models/ActionLog');
+const logAction = require('./utils/logAction');
+
+
 const { searchAndGetPeopleInfo } = require('./rapidapi_linkedIn_scraper');
 const User = require('./models/User'); // make sure this path matches where your User.js is
 const Admin = require('./models/Admin'); // import the admin model
@@ -50,6 +54,9 @@ app.post("/signup", async (req, res) => {
 
     const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
+    await logAction(email, "User signed up");
+
+
     res.status(201).json({ message: "User registered successfully.", token });
   } catch (err) {
     console.error("Error during signup:", err);
@@ -72,6 +79,8 @@ app.post("/login", async (req, res) => {
 
     const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
+    await logAction(email, "User logged in");
+
     res.json({ message: "Login successful.", token });
   } catch (err) {
     console.error("Error during login:", err);
@@ -93,6 +102,10 @@ app.post("/adminlogin", async (req, res) => {
       return res.status(401).json({ message: "Invalid admin credentials." });
 
     const token = jwt.sign({ email, role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    await logAction(email, "Admin logged in");
+
+
     return res.json({ message: "Admin login successful.", token });
   } catch (err) {
     console.error("Error during admin login:", err);
@@ -165,6 +178,8 @@ app.post("/search-people", authenticateToken, async (req, res) => {
       return res.status(404).json({ message: "No people found! Please try again" });
     }
 
+    await logAction(req.user.email, `Searched people with keywords: ${keywords}`);
+
     res.json({ filteredPeople });
   } catch (err) {
     console.error("Error fetching filtered people:", err);
@@ -180,6 +195,18 @@ app.get("/me", authenticateToken, async (req, res) => {
     res.json(user);
   } catch (err) {
     console.error("Error fetching user:", err);
+    res.status(500).json({ message: "Internal server error." });
+  }
+});
+
+
+
+app.get("/admin/logs", authenticateToken, authenticateAdmin, async (req, res) => {
+  try {
+    const logs = await ActionLog.find().sort({ timestamp: -1 }).limit(100);
+    res.json(logs);
+  } catch (err) {
+    console.error("Error fetching logs:", err);
     res.status(500).json({ message: "Internal server error." });
   }
 });

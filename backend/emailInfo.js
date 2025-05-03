@@ -6,11 +6,11 @@ const API_KEY = process.env.RAPIDAPI_KEY
 
 
 module.exports = {
-    getResponse : (username) => axios.request({
+    getResponse : (url) => axios.request({
         method: 'GET',
         url: 'https://linkedin-data-api.p.rapidapi.com/linkedin-to-email',
         params: {
-          username: username
+          url: url
         },
         headers: {
           'x-rapidapi-key': API_KEY,
