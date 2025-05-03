@@ -4,12 +4,15 @@ import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
 
+
 export default function SignUp() {
   const {
     isUserLoggedIn,
     isAdminLoggedIn,
     setUser,
     setIsUserLoggedIn,
+    setToken,
+
   } = useAuth();
   const navigate = useNavigate();
 
@@ -51,6 +54,7 @@ export default function SignUp() {
 
       const token = res.data.token;
       localStorage.setItem("token", token);
+      setToken(token);
 
       const profileRes = await axios.get("http://localhost:3000/user-profile", {
         headers: {
