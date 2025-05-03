@@ -10,7 +10,7 @@ export default function Admin() {
   useLayoutEffect(() => {
     const fetchUsers = async () => {
       try {
-        const token = localStorage.getItem("token"); // or however you store JWT
+        const token = localStorage.getItem("token");
         const response = await axios.get("http://localhost:3000/admin/users", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -44,9 +44,10 @@ export default function Admin() {
     <>
       <AdminNavbar />
       <ScrollToTopButton />
-      <div className="p-4 w-full">
+      <div className="p-4 w-full container mx-auto">
         <h1 className="text-xl font-semibold mb-2">User List</h1>
-        <table className="w-full border border-red-300 overflow-x-auto">
+        <hr />
+        <table className="w-full border border-red-300 overflow-x-auto mt-6">
           <thead className="bg-red-200">
             <tr>
               <th className="border px-4 py-2">Name</th>
@@ -72,7 +73,8 @@ export default function Admin() {
 
       <div className="p-4 w-full mt-10">
         <h1 className="text-xl font-semibold mb-2">Action Logs</h1>
-        <table className="w-full border border-red-300 overflow-x-auto">
+        <hr />
+        <table className="w-full border border-red-300 overflow-x-auto mt-6">
           <thead className="bg-red-200">
             <tr>
               <th className="border px-4 py-2">Email</th>

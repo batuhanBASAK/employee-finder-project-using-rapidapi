@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 import { useAuth } from "../utils/AuthContext";
 import UserNavbar from "../components/UserNavbar";
 import LoadingMessage from "../components/LoadingMessage";
@@ -16,7 +16,7 @@ export default function User() {
   const [loading, setLoading] = useState(false); // 👈 loading state
 
   // inside the component
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fetchUserInfo = async () => {
       try {
         const res = await axios.get("http://localhost:3000/me", {
@@ -60,6 +60,7 @@ export default function User() {
 
       if (response.data && response.data.filteredPeople) {
         setFilteredPeople(response.data.filteredPeople);
+        console.log(filteredPeople)
       } else {
         setError("No filtered people found.");
       }
@@ -94,7 +95,7 @@ export default function User() {
       <div className="mt-6 p-4 container mx-auto">
         <h2 className="text-xl font-bold">Search People</h2>
         <hr />
-        <p className="font-normal text-sm md:text-base mt-6">Enter necessary keywords to filter and get people you want. You can use job title, country, city, education informations, even names as keywords.</p>
+        <p className="font-normal text-sm md:text-base mt-6">Enter necessary keywords to filter and get people you want. You can use job title, country, city, university, even names as keywords.</p>
         <p className="font-normal text-sm md:text-base"><strong>Example Keywords:</strong> data scientist Istanbul Turkey</p>
         <div className="mt-6 flex flex-col gap-2 items-center justify-center w-full">
           <input
@@ -177,49 +178,6 @@ export default function User() {
                     <hr />
                   </p>
                   <p>{person.summary ? person.summary : "N/A"}</p>
-
-                  <p>
-                    <strong className="text-lg font-semibold">Education</strong>
-                    <hr />
-                  </p>
-                  {person.education && person.education.length > 0 ? (
-                    <div className="mt-4">
-                      <p className="font-semibold">Education:</p>
-                      <ul className="list-disc pl-5 mt-2">
-                        {person.education.map((edu, eduIndex) => (
-                          <li key={eduIndex} className="mb-2">
-                            <p className="font-semibold">{edu.schoolName}</p>
-                            <p>
-                              {edu.degree} in {edu.fieldOfStudy}
-                            </p>
-                            <p>
-                              {edu.start?.year} - {edu.end?.year}
-                            </p>
-                            {edu.url && (
-                              <a
-                                href={edu.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-red-600 underline"
-                              >
-                                Visit School
-                              </a>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ) : (
-                    <p>N/A</p>
-                  )}
-
-                  <p>
-                    <p>
-                      <strong className="text-lg font-semibold">Email</strong>
-                      <hr />
-                    </p>
-                    {person.emails ? person.emails : "N/A"}
-                  </p>
                 </div>
               </li>
             ))}
