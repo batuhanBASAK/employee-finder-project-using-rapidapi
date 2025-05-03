@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import ScrollToTopButton from "../components/ScrollToTopButton";
 import { useAuth } from "../utils/AuthContext";
 
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
   return (
     <div className="h-[1000px]">
       <Navbar />
+      <ScrollToTopButton />
       <header className="bg-gray-50 p-4 md:h-screen flex flex-col md:flex-row items-center justify-center gap-4">
         <div className="flex-1">
           <h1 className="text-2xl md:text-5xl tracking-normal font-semibold mb-4">

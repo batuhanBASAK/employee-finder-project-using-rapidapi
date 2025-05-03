@@ -93,8 +93,6 @@ export default function Admin() {
           </tbody>
         </table>
       </div>
-
-      <div className="h-[1000px]"></div>
     </>
   );
 }

@@ -91,22 +91,22 @@ export default function User() {
         </p>
       )}
 
-      <div className="mt-6 p-4">
+      <div className="mt-6 p-4 container mx-auto">
         <h2 className="text-xl font-bold">Search People</h2>
-        <p>Enter necessary keywords to filter and get people you want. You can use job title, country, city, education informations, even names as keywords.</p>
-        <p>Example Keywords: data scientist Istanbul Turkey</p>
         <hr />
-        <div className="mt-6">
+        <p className="font-normal text-sm md:text-base mt-6">Enter necessary keywords to filter and get people you want. You can use job title, country, city, education informations, even names as keywords.</p>
+        <p className="font-normal text-sm md:text-base"><strong>Example Keywords:</strong> data scientist Istanbul Turkey</p>
+        <div className="mt-6 flex flex-col gap-2 items-center justify-center w-full">
           <input
             type="text"
             placeholder="Enter keywords"
             value={keywords}
             onChange={(e) => setKeywords(e.target.value)}
-            className="border p-4 mr-2 outline-red-700"
+            className="border p-4 mr-2 focus:outline-none focus:border focus:border-red-700 focus:shadow-sm focus:shadow-red-700 w-full"
           />
           <button
             onClick={handleSearch}
-            className="p-4 bg-red-600 text-white rounded hover:bg-red-700"
+            className="p-4 bg-red-600 text-white rounded hover:bg-red-700 max-w-36"
             disabled={loading} // 👈 disable while loading
           >
             {loading ? "Searching..." : "Search"}
