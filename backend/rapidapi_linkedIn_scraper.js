@@ -20,7 +20,6 @@ const getPersonProfileInfo = async (username) => {
       city: data.geo.city,
       countryCode: data.geo.countryCode,
       profilePicture: data.profilePicture,
-      educations: data.educations,
     };
   } catch (err) {
     if (err.response && err.response.status === 429) {

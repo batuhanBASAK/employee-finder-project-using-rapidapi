@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useLayoutEffect } from "react";
 import axios from "axios";
 
 const AuthContext = createContext();
@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null); // 👈 Add a token state
 
   // Check for user login status (via token) on mount
-  useEffect(() => {
+  useLayoutEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken); // Store token here in the context

@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 
 export default function Login() {
-  const { isUserLoggedIn, isAdminLoggedIn, setUser, setIsUserLoggedIn } = useAuth();
+  const { isUserLoggedIn, isAdminLoggedIn, setUser, setIsUserLoggedIn, setToken } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isUserLoggedIn) navigate("/user");
     if (isAdminLoggedIn) navigate("/admin");
   }, [isUserLoggedIn, isAdminLoggedIn, navigate]);
@@ -29,6 +29,7 @@ export default function Login() {
 
       const token = res.data.token;
       localStorage.setItem("token", token);
+      setToken(token);
 
       const profileRes = await axios.get("http://localhost:3000/user-profile", {
         headers: {
