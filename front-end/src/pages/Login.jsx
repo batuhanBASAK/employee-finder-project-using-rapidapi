@@ -39,7 +39,6 @@ export default function Login() {
       setUser(profileRes.data);
       setIsUserLoggedIn(true);
       navigate("/user");
-      console.log("Hello World")
 
     } catch (err) {
       console.error("Login failed:", err);

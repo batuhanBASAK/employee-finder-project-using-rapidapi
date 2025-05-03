@@ -81,11 +81,10 @@ export default function User() {
     <>
       <UserNavbar />
       <ScrollToTopButton />
-      <h1 className="text-2xl font-bold p-4">User Home Page</h1>
       {userInfo && (
         <p className="mt-4 text-lg p-4">
           Welcome,{" "}
-          <span className="font-semibold">
+          <span className="font-semibold uppercase">
             {userInfo.name} {userInfo.surname}
           </span>
           !
@@ -93,20 +92,26 @@ export default function User() {
       )}
 
       <div className="mt-6 p-4">
-        <input
-          type="text"
-          placeholder="Enter keywords"
-          value={keywords}
-          onChange={(e) => setKeywords(e.target.value)}
-          className="border p-4 mr-2"
-        />
-        <button
-          onClick={handleSearch}
-          className="p-4 bg-red-600 text-white rounded hover:bg-red-700"
-          disabled={loading} // 👈 disable while loading
-        >
-          {loading ? "Searching..." : "Search"}
-        </button>
+        <h2 className="text-xl font-bold">Search People</h2>
+        <p>Enter necessary keywords to filter and get people you want. You can use job title, country, city, education informations, even names as keywords.</p>
+        <p>Example Keywords: data scientist Istanbul Turkey</p>
+        <hr />
+        <div className="mt-6">
+          <input
+            type="text"
+            placeholder="Enter keywords"
+            value={keywords}
+            onChange={(e) => setKeywords(e.target.value)}
+            className="border p-4 mr-2 outline-red-700"
+          />
+          <button
+            onClick={handleSearch}
+            className="p-4 bg-red-600 text-white rounded hover:bg-red-700"
+            disabled={loading} // 👈 disable while loading
+          >
+            {loading ? "Searching..." : "Search"}
+          </button>
+        </div>
       </div>
 
       {error && <p className="mt-4 text-red-500">{error}</p>}
@@ -122,7 +127,8 @@ export default function User() {
           <h2 className="text-xl font-bold text-red-700">
             {filteredPeople.length} People Found
           </h2>
-          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
+          <hr />
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 mt-6">
             {filteredPeople.map((person, index) => (
               <li
                 key={index}
@@ -203,13 +209,13 @@ export default function User() {
                         ))}
                       </ul>
                     </div>
-                  ) : (<p>N/A</p>)}
+                  ) : (
+                    <p>N/A</p>
+                  )}
 
                   <p>
                     <p>
-                      <strong className="text-lg font-semibold">
-                        Email
-                      </strong>
+                      <strong className="text-lg font-semibold">Email</strong>
                       <hr />
                     </p>
                     {person.emails ? person.emails : "N/A"}

@@ -1,6 +1,7 @@
 import { useLayoutEffect, useState } from "react";
 import AdminNavbar from "../components/AdminNavbar";
 import axios from "axios";
+import ScrollToTopButton from "../components/ScrollToTopButton";
 
 export default function Admin() {
   const [users, setUsers] = useState([]);
@@ -42,6 +43,7 @@ export default function Admin() {
   return (
     <>
       <AdminNavbar />
+      <ScrollToTopButton />
       <div className="p-4 w-full">
         <h1 className="text-xl font-semibold mb-2">User List</h1>
         <table className="w-full border border-red-300 overflow-x-auto">
@@ -68,8 +70,8 @@ export default function Admin() {
         </table>
       </div>
 
-      <div className="mt-10">
-        <h2 className="text-xl font-semibold mb-2">Action Logs</h2>
+      <div className="p-4 w-full mt-10">
+        <h1 className="text-xl font-semibold mb-2">Action Logs</h1>
         <table className="w-full border border-red-300 overflow-x-auto">
           <thead className="bg-red-200">
             <tr>
@@ -91,6 +93,8 @@ export default function Admin() {
           </tbody>
         </table>
       </div>
+
+      <div className="h-[1000px]"></div>
     </>
   );
 }
