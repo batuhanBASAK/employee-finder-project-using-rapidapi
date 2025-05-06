@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from "react";
+import { useState, useLayoutEffect, useRef } from "react";
 import { useAuth } from "../utils/AuthContext";
 import UserNavbar from "../components/UserNavbar";
 import LoadingMessage from "../components/LoadingMessage";
@@ -77,6 +77,10 @@ export default function User() {
       setLoading(false); // 👈 always stop loading at the end
     }
   };
+
+
+
+
 
   return (
     <>
@@ -167,6 +171,11 @@ export default function User() {
                     <strong className="text-lg font-semibold">Headline</strong>
                     <hr />
                     {person.headline}
+                  </p>
+                  <p>
+                    <strong className="text-lg font-semibold">Contact Information</strong>
+                    <hr />
+                    <span className="inline-block">{"https://www.linkedin.com/in/" + person.username}</span>
                   </p>
                   <p>
                     <strong className="text-lg font-semibold">Location</strong>
