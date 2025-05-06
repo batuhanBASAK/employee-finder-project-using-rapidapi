@@ -85,7 +85,7 @@ npm run start
 
 Run this command to make up and run the frontend (Note: you must on frontend directory)
 ```bash
-npm run start
+npm run dev
 ```
 
 
