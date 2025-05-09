@@ -1,4 +1,5 @@
-# rapidapi-demo-project
+# employee-finder-project-using-rapidapi
+
 
 Employee finder application that people can search by keywords such as location, job title, skills, and etc.
 
